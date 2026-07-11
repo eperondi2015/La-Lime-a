@@ -160,6 +160,7 @@
       <a href="https://datastudio.google.com/u/0/reporting/48ba360b-8c64-4c19-b94c-e8a176554761/page/kd9TF" target="_blank" style="background:#1e3a5f;color:#93c5fd;border:none;padding:6px 14px;border-radius:8px;font-size:12px;cursor:pointer;text-decoration:none;white-space:nowrap">🎥 Recorrido Virtual</a>
       <a href="Master_Plan_La_Limena.html" style="background:#1e3a5f;color:#93c5fd;border:none;padding:6px 14px;border-radius:8px;font-size:12px;cursor:pointer;text-decoration:none;white-space:nowrap">🗺️ Master Plan</a>
       <button class="refresh-btn" onclick="copyTourLink(this)" style="background:#166534;color:#bbf7d0">🔗 Copiar link tour</button>
+      <button class="refresh-btn" onclick="copyClientMapLink(this)" style="background:#166534;color:#bbf7d0">🔗 Copiar link plano clientes</button>
       <a href="https://docs.google.com/spreadsheets/d/1ySRHUOzWZnQw2cQAHA2-hz4YEnGavtooXyGMhLeVEms/edit?usp=sharing" target="_blank" style="background:#14532d;color:#86efac;border:none;padding:6px 14px;border-radius:8px;font-size:12px;cursor:pointer;text-decoration:none;white-space:nowrap">📋 Ir a Planilla</a>
       <button class="refresh-btn" onclick="location.reload()">↻ Actualizar</button>
     </div>
@@ -246,6 +247,29 @@
 <script>
 const API = "https://script.google.com/macros/s/AKfycbyBKdG6qadgLyrmDd6fnydjJZufuCQQrMtKg-izNBabdBqncY1x-FLPmYKjWqApRP2A/exec";
 const TOUR_URL = "https://datastudio.google.com/u/0/reporting/48ba360b-8c64-4c19-b94c-e8a176554761/page/kd9TF";
+// 👉 Si cambiás el nombre del repo o del archivo del plano para clientes, actualizá esta URL
+const CLIENT_MAP_URL = "https://eperondi2015.github.io/La-Lime-a/masterplan_clientes.html";
+
+function copyClientMapLink(btn) {
+  const done = (ok) => {
+    const old = btn.textContent;
+    btn.textContent = ok ? '✅ Copiado' : '⚠️ No se pudo copiar';
+    setTimeout(() => { btn.textContent = old; }, 1800);
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(CLIENT_MAP_URL).then(() => done(true)).catch(() => done(false));
+  } else {
+    try {
+      const ta = document.createElement('textarea');
+      ta.value = CLIENT_MAP_URL;
+      ta.style.position = 'fixed'; ta.style.opacity = '0';
+      document.body.appendChild(ta); ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      done(true);
+    } catch (e) { done(false); }
+  }
+}
 
 function copyTourLink(btn) {
   const done = (ok) => {
